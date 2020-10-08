@@ -8,7 +8,9 @@ import { Nav, Navbar, Container, Row, Col, Modal, Button, Form } from 'react-boo
 // leaflet
 import 'leaflet/dist/leaflet.css';
 import './leaflet.css';
-import { Map, TileLayer } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import L from 'leaflet';
+import Markers from './Markers';
 
 import './App.css';
 import './header.css';
@@ -131,12 +133,16 @@ function App() {
     <div className="app">
       <Header />
       <div>
+
         <Map center={[48.85, 2.6]} zoom={13}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-      </Map>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Markers />
+        </Map>
+        
+
       </div>
       <ShowCase />
       <Footer /> 
