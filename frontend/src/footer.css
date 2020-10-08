@@ -1,0 +1,25 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Catamaran&display=swap');
+
+.footer {
+	max-width: 100%;
+	width: 100%;
+	margin: 0px;
+	border-top: 5px solid #fff;
+}
+.footer-top {
+	margin-top: 15px;
+}
+.footer-top-text{
+	margin-top: 0px;
+}
+.footer-down {
+	margin: 0px;
+	padding-bottom: 15px;
+}
+.footer-down-text {
+	padding-left: 0px;	
+}
+.logo {
+	font-size: 56px;
+}
