@@ -1,0 +1,9 @@
+.showcase {
+	margin-left: 0px;
+	padding: 25px;
+	max-width: 100%;
+	width: 100%;
+}
+.showcase h1, h2 {
+	text-align: center;
+}
