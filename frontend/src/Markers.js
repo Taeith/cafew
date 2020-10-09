@@ -4,6 +4,9 @@ import React from 'react';
 import { Marker, Popup } from "react-leaflet";
 import L from 'leaflet';
 
+// jquery
+import $ from 'jquery';
+
 export const pointerIcon = new L.Icon({
   iconUrl: './recycling-center.png',
   iconRetinaUrl: './recycling-center.png',
@@ -26,21 +29,10 @@ export default class Markers extends React.Component {
   }
 
   Markers() {
-    // initialiser markers
-    this.setState({
-      markers: [
-        {
-          longitude: 48.85,
-          latitude: 2.6,
-          message: "aaaaaaa"
-        },
-        {
-          longitude: 48.85,
-          latitude: 2.62,
-          message: "qsdgghqs"
-        },
-      ]
-    })
+    $.getJSON('http://127.0.0.1:4200/')
+     .then((results) => {
+        this.setState({ markers: results.markers });
+     });
   }
 
   render() {
