@@ -1,5 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+
 .app {
 	background-color: #343a40 !important;
 	font-family: 'Catamaran', sans-serif;
+	color: #fff;
+}
+.brand-logo, .brand-name {
+	display: inline-block;
+	vertical-align: middle;
+}
+.brand-logo {
+	font-size: 30px;
+	margin-bottom: -1px;
+}
+.brand-name {
+	font-size: 30px;
+	padding-left: 10px;
+}
+.white {
 	color: #fff;
 }

@@ -1,84 +1,76 @@
 import React from 'react';
-import { useState } from 'react';
 
-// bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Nav, Navbar, Modal, Button, Form } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
+
+import $ from 'jquery';
 
 import './Header.css';
 
-export default function Header() {
+import Signup from './Signup';
+import Login from './Login';
 
-  // use to open and close signup modal
-  const [showSignup, setShowSignup] = useState(false);
-  const handleCloseSignup = () => setShowSignup(false);
-  const handleShowSignup = () => setShowSignup(true);
-
-  // use to open and close login modal
-  const [showLogin, setShowLogin] = useState(false);
-  const handleCloseLogin = () => setShowLogin(false);
-  const handleShowLogin = () => setShowLogin(true);
-
+function Brand() {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand href="#home"><span role="img">☕</span> Cafew</Navbar.Brand>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-      <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto"></Nav>
-        <Nav>
-          <Nav.Link className="header-link" onClick={handleShowSignup}>Inscription</Nav.Link>
-          <Nav.Link className="header-link" onClick={handleShowLogin}>Connexion</Nav.Link>
-        </Nav>
-      </Navbar.Collapse>
-
-      <Modal show={showSignup} onHide={handleCloseSignup}>
-        <Modal.Header closeButton>
-          <Modal.Title>Inscription</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Adresse e-mail</Form.Label>
-              <Form.Control type="email" placeholder="" />
-              <Form.Text className="text-muted">
-                Nous ne partagerons jamais votre e-mail avec qui que ce soit.              </Form.Text>
-            </Form.Group>
-            <Form.Group controlId="formBasicText">
-              <Form.Label>Nom d'utilisateur</Form.Label>
-              <Form.Control placeholder="" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Mot de passe</Form.Label>
-              <Form.Control type="password" placeholder="" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Valider
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showLogin} onHide={handleCloseLogin}>
-        <Modal.Header closeButton>
-          <Modal.Title>Connexion</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formBasicText">
-              <Form.Label>Nom d'utilisateur</Form.Label>
-              <Form.Control placeholder="" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Mot de passe</Form.Label>
-              <Form.Control type="password" placeholder="" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Valider
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
-    </Navbar>
+    <Navbar.Brand href="#home">
+      <span className="brand-logo" role="img">☕</span>
+      <span className="brand-name">Caféw Carnaval</span>
+    </Navbar.Brand>
   );
+}
+
+export default class Header extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showSignup: false,
+      setShowSignup: false,
+      showLogin: false,
+      setShowLogin: false,
+      isLoggedIn: false,
+      username: ''
+    };  
+    this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
+    this.handleShowSignup = () => this.setState({setShowSignup: true, showSignup: true});
+    this.handleCloseLogin = () => this.setState({setShowLogin: false, showLogin: false});
+    this.handleShowLogin = () => this.setState({setShowLogin: true, showLogin: true});
+    this.handleAuthentification = (username) => {
+      this.setState({
+        isLoggedIn: true,
+        username: username
+      });
+    }
+  }
+
+  render() {
+    if (this.state.isLoggedIn) {
+      return (
+        <Navbar bg="dark" variant="dark">
+          <Brand />
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text>
+              Utilisateur: <span className="white">{ this.state.username }</span>
+            </Navbar.Text>
+          </Navbar.Collapse>
+        </Navbar>
+      );
+    } else {
+      return (
+        <Navbar bg="dark" variant="dark">
+          <Brand />
+          <Nav.Link className="header-link ml-auto" onClick={ this.handleShowSignup }>Inscription</Nav.Link>
+          <Nav.Link className="header-link" onClick={ this.handleShowLogin }>Connexion</Nav.Link>
+          <Signup 
+            showSignup={ this.state.showSignup } 
+            handleCloseSignup={ this.handleCloseSignup } />
+          <Login 
+              showLogin={ this.state.showLogin } 
+              handleCloseLogin={ this.handleCloseLogin } 
+              handleAuthentification={ this.handleAuthentification }/>
+        </Navbar>
+      );
+    }
+  }
+
 }
