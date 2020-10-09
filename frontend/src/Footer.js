@@ -13,7 +13,7 @@ export default function Footer() {
           <Col>
             <span role="img" className="logo">☕</span>
             <p className="footer-top-text">
-              Cafew, l'application de recyclage de marc de café
+              Caféw Carnaval, l'application de recyclage de marc de café
             </p>
           </Col>
         </Row>
