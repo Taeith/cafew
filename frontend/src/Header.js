@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, Button } from 'react-bootstrap';
 
 import $ from 'jquery';
 
@@ -22,13 +22,14 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props);
+    const username = window.sessionStorage.getItem('CafewUsername');
     this.state = {
       showSignup: false,
       setShowSignup: false,
       showLogin: false,
       setShowLogin: false,
-      isLoggedIn: false,
-      username: ''
+      isLoggedIn: username != null,
+      username: username
     };  
     this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
     this.handleShowSignup = () => this.setState({setShowSignup: true, showSignup: true});
@@ -40,6 +41,14 @@ export default class Header extends React.Component {
         username: username
       });
     }
+    this.signout = () => {
+      window.sessionStorage.removeItem('CafewToken');
+      window.sessionStorage.removeItem('CafewUsername');
+      this.setState({
+        isLoggedIn: false,
+        username: ''
+      });
+    };
   }
 
   render() {
@@ -48,10 +57,12 @@ export default class Header extends React.Component {
         <Navbar bg="dark" variant="dark">
           <Brand />
           <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
+          <Navbar.Collapse className="justify-content-end">            
             <Navbar.Text>
-              Utilisateur: <span className="white">{ this.state.username }</span>
+              Connecté en tant que : <span className="white">{ this.state.username }</span>
             </Navbar.Text>
+            <Button variant="outline-primary" className="profileButton">Mon profil</Button>
+            <Button onClick={ this.signout }variant="outline-danger" className="signoutButton">Déconnexion</Button>
           </Navbar.Collapse>
         </Navbar>
       );

@@ -35,8 +35,8 @@ export default class Login extends React.Component {
       .then((response) => response.json())
       .then(data => {
         if (data.token != undefined && data.username != undefined) {
-          window.sessionStorage.setItem('cafew-token', data.token);
-          window.sessionStorage.setItem('cafew-username', data.username);
+          window.sessionStorage.setItem('CafewToken', data.token);
+          window.sessionStorage.setItem('CafewUsername', data.username);
           props.handleAuthentification(data.username);
         }        
       });
