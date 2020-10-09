@@ -33,7 +33,7 @@ const errorHandler = (error) => {
 	}
 };
 
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || 4200);
 app.set('port', port);
 
 const server = http.createServer(app);
