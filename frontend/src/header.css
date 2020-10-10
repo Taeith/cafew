@@ -4,3 +4,7 @@
 .profileButton, .signoutButton {
 	margin-left: 10px !important;
 }
+.modal-90w {
+	max-width: 100%;
+	width: 90%;
+}

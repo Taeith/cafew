@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
 
 .app {
-	background-color: #343a40 !important;
-	font-family: 'Catamaran', sans-serif;
+	background-color: rgb(51,51,51) !important;
+	font-family: 'Sofia', sans-serif;
 	color: #fff;
 }
 .brand-logo, .brand-name {
@@ -10,12 +11,12 @@
 	vertical-align: middle;
 }
 .brand-logo {
-	font-size: 30px;
-	margin-bottom: -1px;
+	width: 35px;
 }
 .brand-name {
-	font-size: 30px;
-	padding-left: 10px;
+	font-size: 35px;
+	padding-left: 13px;
+
 }
 .white {
 	color: #fff;
