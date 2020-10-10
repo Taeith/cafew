@@ -2,9 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
 
 .app {
-	background-color: rgb(51,51,51) !important;
+	background-color: #20232a !important;
 	font-family: 'Sofia', sans-serif;
-	color: #fff;
+	color: rgb(230,230,230);
 }
 .brand-logo, .brand-name {
 	display: inline-block;
@@ -15,9 +15,15 @@
 }
 .brand-name {
 	font-size: 35px;
-	padding-left: 13px;
-
+	padding-left: 11px;
+	color: rgb(230,230,230);
 }
 .white {
-	color: #fff;
+	color: rgb(230,230,230);
+}
+
+.modal-header, .modal-body {
+	background-color: #20232a !important;
+	color: white;
+	border-radius: 0px;
 }

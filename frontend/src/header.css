@@ -1,7 +1,12 @@
 .header-link {
 	color: #fff !important;
 }
+.buttons {
+	display: inline;
+	padding: 5px;
+}
 .profileButton, .signoutButton {
+	width: 110px;
 	margin-left: 10px !important;
 }
 .modal-90w {

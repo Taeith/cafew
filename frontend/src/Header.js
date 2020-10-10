@@ -31,8 +31,8 @@ export default class Header extends React.Component {
       setShowLogin: false,
       showProfile: false,
       setShowProfile: false,
-      isLoggedIn: username != null,
-      username: username
+      isLoggedIn: true,//username != null,
+      username: "Taeith"//username
     };  
     this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
     this.handleShowSignup = () => this.setState({setShowSignup: true, showSignup: true});
@@ -59,15 +59,33 @@ export default class Header extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <Navbar bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="sm" variant="dark">
           <Brand />
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">            
-            <Navbar.Text>
-              Connecté en tant que : <span className="white">{ this.state.username }</span>
-            </Navbar.Text>
-            <Button onClick={ this.handleShowProfile } variant="outline-primary" className="profileButton">Mon profil</Button>
-            <Button onClick={ this.signout }variant="outline-danger" className="signoutButton">Déconnexion</Button>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse 
+            id="responsive-navbar-nav"
+            className="justify-content-end" >    
+            <Nav className="ml-auto">
+              <Nav className="buttons">
+                <Navbar.Text>
+                  Connecté en tant que : <span className="white">{ this.state.username }</span>
+                </Navbar.Text>
+              </Nav>              
+              <Nav className="buttons">
+                <Button 
+                  onClick = { this.handleShowProfile } 
+                  variant = "outline-primary" 
+                  className = "profileButton">
+                  Mon profil
+                </Button>
+                <Button 
+                  onClick = { this.signout }
+                  variant = "outline-danger" 
+                  className = "signoutButton" >
+                  Déconnexion
+                </Button>
+              </Nav>
+            </Nav>
           </Navbar.Collapse>
           <Profile
             showProfile={ this.state.showProfile } 
@@ -76,7 +94,7 @@ export default class Header extends React.Component {
       );
     } else {
       return (
-        <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="sm" variant="dark">
           <Brand />
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">

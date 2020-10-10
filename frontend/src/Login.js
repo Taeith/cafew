@@ -51,8 +51,8 @@ export default class Login extends React.Component {
   render() {
     return (
       <Modal show={ this.props.showLogin } onHide={ this.props.handleCloseLogin }>
-        <Modal.Header closeButton>
-          <Modal.Title>Connexion</Modal.Title>
+        <Modal.Header className="modal-header text-center" closeButton>
+          <Modal.Title className="modal-title w-100">Connexion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

@@ -48,9 +48,11 @@ export default class Signup extends React.Component {
 
   render() {
     return (
-      <Modal show={ this.props.showSignup } onHide={ this.props.handleCloseSignup }>
-        <Modal.Header closeButton>
-          <Modal.Title>Inscription</Modal.Title>
+      <Modal 
+        show = { this.props.showSignup } 
+        onHide = { this.props.handleCloseSignup } >
+        <Modal.Header className="modal-header text-center" closeButton>
+          <Modal.Title className="modal-title w-100">Inscription</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
