@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Nav, Navbar, Button } from 'react-bootstrap';
 
+import CustomToast from './CustomToast';
+
 import $ from 'jquery';
 
 import './Header.css';
@@ -31,9 +33,34 @@ export default class Header extends React.Component {
       setShowLogin: false,
       showProfile: false,
       setShowProfile: false,
-      isLoggedIn: true,//username != null,
-      username: "Taeith"//username
-    };  
+      isLoggedIn: username != null,
+      username: username,
+      customToast: {
+        type: '',
+        message: '',
+        show: false,
+        setShow: false
+      }
+    };
+    // CustomToast
+    this.handleCloseToast = () => this.setState(prevState => ({
+      customToast: {
+        ...prevState.customToast,
+        show: false, 
+        setShow: false
+      }
+    }));
+    this.handleShowToast = (type, message) => {
+      this.setState({
+        customToast: {
+          type: type,
+          message: message,
+          show: true, 
+          setShow: true
+        }
+      });
+    };
+    // Modals
     this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
     this.handleShowSignup = () => this.setState({setShowSignup: true, showSignup: true});
     this.handleCloseLogin = () => this.setState({setShowLogin: false, showLogin: false});
@@ -41,6 +68,7 @@ export default class Header extends React.Component {
     this.handleCloseProfile = () => this.setState({setShowProfile: false, showProfile: false});
     this.handleShowProfile = () => this.setState({setShowProfile: true, showProfile: true});
     this.handleAuthentification = (username) => {
+      this.handleCloseLogin();
       this.setState({
         isLoggedIn: true,
         username: username
@@ -53,6 +81,7 @@ export default class Header extends React.Component {
         isLoggedIn: false,
         username: ''
       });
+      this.handleShowToast("success", "La session a été supprimée.");
     };
   }
 
@@ -110,12 +139,19 @@ export default class Header extends React.Component {
             </Nav>            
           </Navbar.Collapse>
           <Signup 
-            showSignup={ this.state.showSignup } 
-            handleCloseSignup={ this.handleCloseSignup } />
+            showSignup = { this.state.showSignup } 
+            handleCloseSignup = { this.handleCloseSignup } 
+            handleShowToast = { this.handleShowToast } />
           <Login 
-              showLogin={ this.state.showLogin } 
-              handleCloseLogin={ this.handleCloseLogin } 
-              handleAuthentification={ this.handleAuthentification }/>
+              showLogin = { this.state.showLogin } 
+              handleCloseLogin = { this.handleCloseLogin } 
+              handleAuthentification = { this.handleAuthentification }
+              handleShowToast = { this.handleShowToast } />
+          <CustomToast 
+              handleCloseToast = { this.handleCloseToast } 
+              showToast = { this.state.customToast.show }
+              type = { this.state.customToast.type }
+              message = { this.state.customToast.message } />
         </Navbar>
       );
     }

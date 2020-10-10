@@ -2,6 +2,13 @@ import React from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
+function status(response) {
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  return response;
+}
+
 export default class Login extends React.Component { 
 
   constructor(props) {
@@ -32,14 +39,16 @@ export default class Login extends React.Component {
           password: this.state.password
         })
       })
+      .then(status)
       .then((response) => response.json())
       .then(data => {
         if (data.token != undefined && data.username != undefined) {
+          this.props.handleAuthentification(data.username);
           window.sessionStorage.setItem('CafewToken', data.token);
           window.sessionStorage.setItem('CafewUsername', data.username);
-          props.handleAuthentification(data.username);
-        }        
-      });
+        }     
+      })
+      .catch(error => this.props.handleShowToast("danger", "L'adresse e-mail ou le mot de passe est incorrect."));
     };
   }
 

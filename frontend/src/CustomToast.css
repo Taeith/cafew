@@ -1,0 +1,18 @@
+.customToast {
+	z-index: 9999;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+}
+.customToast-success {
+	background-color: rgb(37, 156, 64);
+	color: #fff;
+}
+.customToast-danger {
+	background-color: #dc3545;
+	color: #fff;
+}
+.toast-body {
+	background-color: #fff;
+	color: black;
+}

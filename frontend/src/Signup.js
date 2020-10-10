@@ -2,6 +2,13 @@ import React from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
+function status(response) {
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  return response;
+}
+
 export default class Signup extends React.Component {
 
   constructor(props) {
@@ -33,10 +40,13 @@ export default class Signup extends React.Component {
           username: this.state.text,
           password: this.state.password
         })
-      }).then((results) => {
-          alert(results);
-          console.log(results);
-       });
+      })
+      .then(status)
+      .then((response) => {
+        this.props.handleCloseSignup();
+        this.props.handleShowToast("success", "L'inscription a été validée, vous pouvez vous connecter.");
+      })
+      .catch(error => this.props.handleShowToast("danger", "L'adresse e-mail ou le nom d'utilisateur saisi n'est pas disponible."));
     };
   }
 
@@ -50,7 +60,7 @@ export default class Signup extends React.Component {
     return (
       <Modal 
         show = { this.props.showSignup } 
-        onHide = { this.props.handleCloseSignup } >
+        onHide = { this.props.handleCloseSignup } >        
         <Modal.Header className="modal-header text-center" closeButton>
           <Modal.Title className="modal-title w-100">Inscription</Modal.Title>
         </Modal.Header>
