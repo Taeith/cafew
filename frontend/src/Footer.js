@@ -11,9 +11,9 @@ export default function Footer() {
       <Container className="footer">
         <Row className="footer-top">
           <Col>
-            <span role="img" className="logo">☕</span>
+            <img src="/coffee.png" className="logo" />
             <p className="footer-top-text">
-              Caféw Carnaval, l'application de recyclage de marc de café
+              Caféw, l'application de recyclage de marc de café
             </p>
           </Col>
         </Row>
