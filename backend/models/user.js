@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
+	isRecycler: {
+		type: Boolean,
+		required: true,
+	},
 	email: {
 		type: String,
 		required: true,

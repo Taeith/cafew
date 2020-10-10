@@ -14,14 +14,15 @@ export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isRecycler: false,
       email: '',
-      text: '',
+      username: '',
       password: '',
       disabled: true
     }
     this.handleChange = (event) => {
       this.setState({
-        [event.target.type]: event.target.value,        
+        [event.target.id]: event.target.id == 'isRecycler' ? event.target.value == 'true' : event.target.value  
       }, () => {
         this.setState({
           disabled: !this.isValid()
@@ -36,8 +37,9 @@ export default class Signup extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          isRecycler: this.state.isRecycler,
           email: this.state.email,
-          username: this.state.text,
+          username: this.state.username,
           password: this.state.password
         })
       })
@@ -52,7 +54,7 @@ export default class Signup extends React.Component {
 
   isValid() {
     return this.state.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) != null &&
-      this.state.text.length > 5 &&
+      this.state.username.length > 5 &&
       this.state.password.length > 5;
   }
 
@@ -66,17 +68,24 @@ export default class Signup extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="formBasicEmail">
+            <Form.Group controlId="isRecycler">
+              <Form.Label>Objectif</Form.Label>
+              <Form.Control as = "select" onChange = { this.handleChange } >
+                <option value = "false" >Je veux recycler mon marc de café</option>
+                <option value = "true" >Je souhaite obtenir de l'engrais</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="email">
               <Form.Label>Adresse e-mail</Form.Label>
-              <Form.Control type="email" placeholder="" onChange={ this.handleChange }/>
+              <Form.Control className="sqddsd" type="email" placeholder="" onChange={ this.handleChange }/>
               <Form.Text className="text-muted">
                 Nous ne partagerons jamais votre e-mail avec qui que ce soit.              </Form.Text>
             </Form.Group>
-            <Form.Group controlId="formBasicText">
+            <Form.Group controlId="username">
               <Form.Label>Nom d'utilisateur</Form.Label>
               <Form.Control type="text" placeholder="" onChange={ this.handleChange }/>
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group controlId="password">
               <Form.Label>Mot de passe</Form.Label>
               <Form.Control type="password" placeholder="" onChange={ this.handleChange }/>
             </Form.Group>
