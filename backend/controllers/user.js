@@ -14,7 +14,12 @@ exports.signup = (request, response, next) => {
         isRecycler: request.body.isRecycler,
         email: request.body.email,
         username: request.body.username,
-        password: hash
+        password: hash,
+        quantity: '500',
+        street: '',
+        city: '',
+        day: '1',
+        hour: '6:00'
       });
       console.log('save user');
       user.save()
@@ -61,3 +66,64 @@ exports.login = (request, response, next) => {
     })
     .catch(error => response.status(500).json({ error }));
 };
+
+function getById(id, callback) {
+  User.findOne({ _id: id })
+  .then(user => callback(user));
+}
+
+exports.get = (request, response, next) => {
+  const token = request.headers.authorization.split(" ")[1];
+  const tokenUserId = jsonWebToken.verify(token, 'RANDOM_TOKEN_SECRET').userId;
+  if (request.params.id == tokenUserId) {
+    console.log('search user');
+    User.findOne({ _id: request.params.id })
+    .then(user => response.status(200).json({
+      _id: user._id,
+      email: user.email,
+      username: user.username,
+      quantity: user.quantity,
+      street: user.street,
+      city: user.city,
+      day: user.day,
+      hour: user.hour
+    }))
+    .catch(error => response.status(500).json({ error }));
+  } else {
+    response.status(401).json({});
+  }
+};
+
+exports.update = (request, response, next) => {
+
+  getById(request.params.id, user => {
+
+    const newUser = new User({
+      _id: user._id,
+      isRecycler: user.isRecycler,
+      email: request.body.email,
+      username: request.body.username,
+      password: user.password,
+      quantity: request.body.quantity,
+      street: request.body.street,
+      city: request.body.city,
+      day: request.body.day,
+      hour: request.body.hour
+    });
+
+    console.log(JSON.stringify(newUser));
+
+    User.updateOne({ _id: user._id }, newUser)
+    .then(() => {
+      console.log('ok update');
+      response.status(201).json({});
+    })
+    .catch(error => {
+      console.log('error update');
+      response.status(500).json({})
+    });
+
+  });
+  
+
+}

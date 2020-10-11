@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 // routes
 const userRoutes = require('./routes/user');
+const markerRoutes = require('./routes/marker');
 
 // others
 const bodyParser = require('body-parser');
@@ -25,28 +26,13 @@ app.use(bodyParser.json());
 
 app.use((request, response, next) => {
 	response.setHeader('Access-Control-Allow-Origin', '*');
-	response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+	response.setHeader('Access-Control-Allow-Headers', '*');
 	response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+	response.setHeader('Access-Control-Allow-Credentials', true);
 	next();
 });
 
+app.use('/api/markers/', markerRoutes);
 app.use('/api/auth/', userRoutes);
-
-app.get('/', (request, response, next) => {
-	response.status(200).json({
-		markers: [
-        {
-          longitude: 48.85,
-          latitude: 2.6,
-          message: "from api 1"
-        },
-        {
-          longitude: 48.85,
-          latitude: 2.62,
-          message: "from api 2"
-        },
-      ]
-	});
-});
 
 module.exports = app;

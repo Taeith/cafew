@@ -26,6 +26,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
     const username = window.sessionStorage.getItem('CafewUsername');
+    this.profile = React.createRef();
     this.state = {
       showSignup: false,
       setShowSignup: false,
@@ -66,7 +67,14 @@ export default class Header extends React.Component {
     this.handleCloseLogin = () => this.setState({setShowLogin: false, showLogin: false});
     this.handleShowLogin = () => this.setState({setShowLogin: true, showLogin: true});
     this.handleCloseProfile = () => this.setState({setShowProfile: false, showProfile: false});
-    this.handleShowProfile = () => this.setState({setShowProfile: true, showProfile: true});
+    
+    this.handleShowProfile = () => {
+      this.profile.current.load();
+      this.setState({
+        setShowProfile: true, 
+        showProfile: true
+      });
+    };
     this.handleAuthentification = (username) => {
       this.handleCloseLogin();
       this.setState({
@@ -88,7 +96,7 @@ export default class Header extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <Navbar collapseOnSelect expand="sm" variant="dark">
+        <Navbar collapseOnSelect expand="sm" variant="dark">      
           <Brand />
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse 
@@ -117,8 +125,15 @@ export default class Header extends React.Component {
             </Nav>
           </Navbar.Collapse>
           <Profile
+            ref = { this.profile }
             showProfile={ this.state.showProfile } 
-            handleCloseProfile={ this.handleCloseProfile } />
+            handleCloseProfile={ this.handleCloseProfile } 
+            handleShowToast = { this.handleShowToast } />
+          <CustomToast 
+              handleCloseToast = { this.handleCloseToast } 
+              showToast = { this.state.customToast.show }
+              type = { this.state.customToast.type }
+              message = { this.state.customToast.message } />
         </Navbar>
       );
     } else {

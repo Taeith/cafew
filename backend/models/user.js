@@ -20,6 +20,26 @@ const userSchema = mongoose.Schema({
 	password: {
 		type: String,
 		required: true
+	},
+	quantity: {
+		type: String,
+		required: false
+	},
+	street: {
+		type: String,
+		required: false
+	},
+	city: {
+		type: String,
+		required: false
+	},
+	day: {
+		type: String,
+		required: false
+	},
+	hour: {
+		type: String,
+		required: false
 	}
 });
 

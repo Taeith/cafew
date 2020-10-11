@@ -90,7 +90,7 @@ export default class Signup extends React.Component {
               <Form.Control type="password" placeholder="" onChange={ this.handleChange }/>
             </Form.Group>
             <Button variant="primary" disabled={(this.state.disabled) ? 'disabled' : ''}
-              onClick={this.handleSubmit} >
+              onClick={ this.handleSubmit } >
               Valider
             </Button>
           </Form>
