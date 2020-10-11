@@ -26,7 +26,6 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
     const username = window.sessionStorage.getItem('CafewUsername');
-    this.profile = React.createRef();
     this.state = {
       showSignup: false,
       setShowSignup: false,
@@ -69,7 +68,6 @@ export default class Header extends React.Component {
     this.handleCloseProfile = () => this.setState({setShowProfile: false, showProfile: false});
     
     this.handleShowProfile = () => {
-      this.profile.current.load();
       this.setState({
         setShowProfile: true, 
         showProfile: true
@@ -125,7 +123,6 @@ export default class Header extends React.Component {
             </Nav>
           </Navbar.Collapse>
           <Profile
-            ref = { this.profile }
             showProfile={ this.state.showProfile } 
             handleCloseProfile={ this.handleCloseProfile } 
             handleShowToast = { this.handleShowToast } />

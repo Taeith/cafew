@@ -1,13 +1,8 @@
 import React from 'react';
 
 import { Modal, Button, Form, Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-
-function status(response) {
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  return response;
-}
+import { get, put } from './Utils.js';
+import './Profile.css';
 
 export default class Profile extends React.Component { 
 
@@ -20,65 +15,60 @@ export default class Profile extends React.Component {
       street: '',
       city: '',
       day: '',
-      hour: ''
+      hour: '',
+      disabled: false,
     }
-    this.handleChange = (event) => {
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      [event.target.id]: event.target.value,        
+    }, () => {
       this.setState({
-        [event.target.id]: event.target.value,        
+        disabled: !this.isValid()
       });
-    };
-    this.handleSubmit = () => {
-      fetch('http://127.0.0.1:4200/api/auth/user/' + window.sessionStorage.getItem('CafewUserId'), {
-        method: 'PUT',
-        credentials: 'same-origin',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + window.sessionStorage.getItem('CafewToken')
-        },
-        body: JSON.stringify({
-          email: this.state.email,
-          username: this.state.username,
-          quantity: this.state.quantity,
-          street: this.state.street,
-          city: this.state.city,
-          day: this.state.day,
-          hour: this.state.hour,
-        })
-      })
-      .then(status)
-      .then((response) => {  
-        this.props.handleCloseProfile(); 
-        this.props.handleShowToast("success", "La modification a été validée");
-      })
-      .catch(error => {
-        this.props.handleShowToast("danger", "Le serveur est temporairement indisponible."
-      )});
-    };
-    this.load = () => {
-      fetch('http://127.0.0.1:4200/api/auth/user/' + window.sessionStorage.getItem('CafewUserId'), {
-        method: 'GET',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept' : 'application/json',
-          'Authorization': 'Basic ' + window.sessionStorage.getItem('CafewToken')
-        }
-      })
-      .then(response => response.json())
-      .then(user => {
-        console.log(user);
-         this.setState({
-          email: user.email,
-          username: user.username,
-          quantity: user.quantity,
-          street: user.street,
-          city: user.city,
-          day: user.day,
-          hour: user.hour
-         });
-      });
-    }
+    });
+  };
+
+  handleSubmit = () => {
+    put('/auth/user/' + window.sessionStorage.getItem('CafewUserId'),
+      JSON.stringify({
+        email: this.state.email,
+        username: this.state.username,
+        quantity: this.state.quantity,
+        street: this.state.street,
+        city: this.state.city,
+        day: this.state.day,
+        hour: this.state.hour,
+    }))
+    .then((response) => {  
+      this.props.handleCloseProfile(); 
+      this.props.handleShowToast("success", "La modification a été validée");
+    })
+    .catch(error => {
+      this.props.handleShowToast("danger", "Le serveur est temporairement indisponible."
+    )});
+  };
+
+  load = () => {
+    get('/auth/user/' + window.sessionStorage.getItem('CafewUserId'))
+    .then(user => {
+       this.setState({
+        email: user.email,
+        username: user.username,
+        quantity: user.quantity,
+        street: user.street,
+        city: user.city,
+        day: user.day,
+        hour: user.hour
+       });
+    });
+  }
+
+  isValid() {
+    return (
+      this.state.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) != null &&
+      this.state.username.length > 5);
   }
 
   render() {
@@ -88,9 +78,10 @@ export default class Profile extends React.Component {
     .map(hour => <option>{ hour }:00</option>);
     return (
       <Modal
-        show={ this.props.showProfile } 
-        onHide={ this.props.handleCloseProfile }
-        dialogClassName="modal-90w">
+        onEnter = { this.load }
+        show = { this.props.showProfile } 
+        onHide = { this.props.handleCloseProfile }
+        className = "profile" >
         <Modal.Header className="modal-header text-center" closeButton>
           <Modal.Title className="modal-title w-100">Mes informations personnelles</Modal.Title>
         </Modal.Header>
@@ -209,15 +200,15 @@ export default class Profile extends React.Component {
             </Container>
           </Form>
         </Modal.Body>
-
-        <Modal.Footer>
+        <Modal.Footer
+          className = "profile-bottom" >
           <Button 
             variant="warning"
-            onClick={ this.handleSubmit } >
+            onClick={ this.handleSubmit } 
+            disabled={(this.state.disabled) ? 'disabled' : ''} >
             Modifier
           </Button>
         </Modal.Footer>
-
       </Modal>
     );
   }

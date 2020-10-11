@@ -95,35 +95,44 @@ exports.get = (request, response, next) => {
 };
 
 exports.update = (request, response, next) => {
+  const token = request.headers.authorization.split(" ")[1];
+  const tokenUserId = jsonWebToken.verify(token, 'RANDOM_TOKEN_SECRET').userId;
+  if (request.params.id == tokenUserId) {
 
-  getById(request.params.id, user => {
+    getById(request.params.id, user => {
 
-    const newUser = new User({
-      _id: user._id,
-      isRecycler: user.isRecycler,
-      email: request.body.email,
-      username: request.body.username,
-      password: user.password,
-      quantity: request.body.quantity,
-      street: request.body.street,
-      city: request.body.city,
-      day: request.body.day,
-      hour: request.body.hour
+      const newUser = new User({
+        _id: user._id,
+        isRecycler: user.isRecycler,
+        email: request.body.email,
+        username: request.body.username,
+        password: user.password,
+        quantity: request.body.quantity,
+        street: request.body.street,
+        city: request.body.city,
+        day: request.body.day,
+        hour: request.body.hour
+      });
+
+      console.log(JSON.stringify(newUser));
+
+      User.updateOne({ _id: user._id }, newUser)
+      .then(() => {
+        console.log('ok update');
+        response.status(201).json({});
+      })
+      .catch(error => {
+        console.log('error update');
+        response.status(500).json({})
+      });
+
     });
+    
+  } else {
+    response.status(401).json({});
+  }
 
-    console.log(JSON.stringify(newUser));
-
-    User.updateOne({ _id: user._id }, newUser)
-    .then(() => {
-      console.log('ok update');
-      response.status(201).json({});
-    })
-    .catch(error => {
-      console.log('error update');
-      response.status(500).json({})
-    });
-
-  });
+  
   
 
 }
