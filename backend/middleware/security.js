@@ -1,22 +1,20 @@
 const jsonWebToken = require('jsonwebtoken');
 
 module.exports = (request, response, next) => {
-  console.log('try to auth');  
   try {
+    console.log('[OPEN] SECURITY');
     const token = request.headers.authorization.split(" ")[1];
-    console.log('token = ' + token);
     const decodedToken = jsonWebToken.verify(token, 'RANDOM_TOKEN_SECRET');
-    console.log('decodedToken = ' + decodedToken);
-    const userId = decodedToken.userId;
-    console.log('userId = ' + userId);
-    if (request.body.userId && request.body.userId !== userId) {
-      throw 'Invalid user ID';
-    } else {
-      console.log('next');
+    const tokenUserId = decodedToken.userId;
+    console.log('[INFO] Check User ID <' + request.params.id + ', ' + tokenUserId + '>');
+    if (request.params.id == tokenUserId) {
+      console.log('[SUCCESS] User ID VALID');
       next();
+    } else {
+      throw 'Invalid user ID';
     }
   } catch {
-    console.log('bug');
+    console.log('[ERROR] User ID NOT VALID');
     response.status(401).json({
       error: new Error('Invalid request!')
     });

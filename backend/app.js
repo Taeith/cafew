@@ -5,6 +5,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 // routes
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const markerRoutes = require('./routes/marker');
 
@@ -32,7 +33,8 @@ app.use((request, response, next) => {
 	next();
 });
 
+app.use('/api/user/', userRoutes);
+app.use('/api/auth/', authRoutes);
 app.use('/api/markers/', markerRoutes);
-app.use('/api/auth/', userRoutes);
 
 module.exports = app;
