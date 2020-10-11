@@ -114,6 +114,12 @@ export default class Header extends React.Component {
                   Mon profil
                 </Button>
                 <Button 
+                  onClick = { this.handleShowProfile } 
+                  variant = "outline-primary" 
+                  className = "profileButton">
+                  Contacts
+                </Button>
+                <Button 
                   onClick = { this.signout }
                   variant = "outline-danger" 
                   className = "signoutButton" >

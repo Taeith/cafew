@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const markerRoutes = require('./routes/marker');
+const requestRoutes = require('./routes/request');
 
 // others
 const bodyParser = require('body-parser');
@@ -35,6 +36,7 @@ app.use((request, response, next) => {
 
 app.use('/api/user/', userRoutes);
 app.use('/api/auth/', authRoutes);
+app.use('/api/request/', requestRoutes);
 app.use('/api/markers/', markerRoutes);
 
 module.exports = app;

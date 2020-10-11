@@ -31,7 +31,7 @@ export default class Profile extends React.Component {
   };
 
   handleSubmit = () => {
-    put('/auth/user/' + window.sessionStorage.getItem('CafewUserId'),
+    put('/user/' + window.sessionStorage.getItem('CafewUserId'),
       JSON.stringify({
         email: this.state.email,
         username: this.state.username,
@@ -51,7 +51,7 @@ export default class Profile extends React.Component {
   };
 
   load = () => {
-    get('/auth/user/' + window.sessionStorage.getItem('CafewUserId'))
+    get('/user/' + window.sessionStorage.getItem('CafewUserId'))
     .then(user => {
        this.setState({
         email: user.email,
