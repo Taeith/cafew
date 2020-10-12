@@ -7,7 +7,11 @@ const requestSchema = mongoose.Schema({
   },
   recycler: {
   	type: String,
-  	required: false
+  	required: true
+  },
+  state: {
+  	type: String,
+  	required: true
   }
 });
 

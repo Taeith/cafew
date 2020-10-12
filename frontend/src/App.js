@@ -25,8 +25,9 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
+		const username = window.sessionStorage.getItem('CafewUsername');
 		this.state = {
-			isLoggedIn: false,			
+			isLoggedIn: username != null,			
 			customToast: {
 	        	type: '',
 	        	message: '',
@@ -70,11 +71,16 @@ class App extends React.Component {
 						setIsLoggedIn = { this.setIsLoggedIn } 
 						handleShowToast = { this.handleShowToast } />
 					<Container fluid style={{'margin-bottom':'30px', 'min-height':'700px'}}>
-						<Row>
-							<Col xs = { 12 } md = { 2 } id = "sidebar-wrapper" >      
-								<Sidebar />
-							</Col>
-							<Col xs = { 12 } md = { 10 } lg = { 8 } id = "page-content-wrapper" >
+						<Row> {
+							this.state.isLoggedIn ? 
+								(<Col xs = { 12 } md = { 2 } id = "sidebar-wrapper" ><Sidebar /></Col>) :
+								''
+							}
+							<Col 
+								xs = { 12 } 
+								md = { this.state.isLoggedIn ? 10 : 12 }
+								lg = { this.state.isLoggedIn ? 8 : 12 } 
+								id = "page-content-wrapper" >							
 								<Switch>
 									<Route path="/profile">
 										<Profile
@@ -83,7 +89,8 @@ class App extends React.Component {
 								            handleShowToast = { this.handleShowToast } />
 									</Route>
 									<Route path="/contacts">
-										<Contacts />
+										<Contacts 
+											handleShowToast = { this.handleShowToast } />
 									</Route>
 									<Route path="/messages">
 										<Messages />

@@ -24,7 +24,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      username: props.username,
       showSignup: false,
       setShowSignup: false,
       showLogin: false,
