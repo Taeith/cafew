@@ -2,12 +2,7 @@ import React from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-function status(response) {
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  return response;
-}
+import { post } from './Utils.js';
 
 export default class Signup extends React.Component {
 
@@ -19,38 +14,35 @@ export default class Signup extends React.Component {
       username: '',
       password: '',
       disabled: true
-    }
-    this.handleChange = (event) => {
-      this.setState({
-        [event.target.id]: event.target.id == 'isRecycler' ? event.target.value == 'true' : event.target.value  
-      }, () => {
-        this.setState({
-          disabled: !this.isValid()
-        });
-      });
-    };
-    this.handleSubmit = () => {
-      fetch('http://127.0.0.1:4200/api/auth/signup/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          isRecycler: this.state.isRecycler,
-          email: this.state.email,
-          username: this.state.username,
-          password: this.state.password
-        })
-      })
-      .then(status)
-      .then((response) => {
-        this.props.handleCloseSignup();
-        this.props.handleShowToast("success", "L'inscription a été validée, vous pouvez vous connecter.");
-      })
-      .catch(error => this.props.handleShowToast("danger", "L'adresse e-mail ou le nom d'utilisateur saisi n'est pas disponible."));
-    };
+    }    
   }
+
+  handleChange = (event) => {
+    this.setState({
+      [event.target.id]: event.target.id == 'isRecycler' ? event.target.value == 'true' : event.target.value  
+    }, () => {
+      this.setState({
+        disabled: !this.isValid()
+      });
+    });
+  };
+
+  handleSubmit = () => {
+    post('/auth/signup/',
+      JSON.stringify({
+        isRecycler: this.state.isRecycler,
+        email: this.state.email,
+        username: this.state.username,
+        password: this.state.password
+    }))
+    .then(data => {
+      this.props.handleCloseSignup();
+      this.props.handleShowToast("success", "L'inscription a été validée, vous pouvez vous connecter.");
+    })
+    .catch(error => {
+      this.props.handleShowToast("danger", "L'adresse e-mail ou le nom d'utilisateur saisi n'est pas disponible.");
+    });
+  };
 
   isValid() {
     return this.state.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/) != null &&
@@ -63,8 +55,13 @@ export default class Signup extends React.Component {
       <Modal 
         show = { this.props.showSignup } 
         onHide = { this.props.handleCloseSignup } >        
-        <Modal.Header className="modal-header text-center" closeButton>
-          <Modal.Title className="modal-title w-100">Inscription</Modal.Title>
+        <Modal.Header 
+          className="modal-header text-center" 
+          closeButton >
+          <Modal.Title 
+            className="modal-title w-100" >
+            Inscription
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

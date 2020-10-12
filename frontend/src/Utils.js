@@ -8,19 +8,27 @@ function status(response) {
   return response;
 }
 
+function update(path, body, method) {
+  return fetch(URL + path, {
+    method: method,
+    credentials: 'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ' + window.sessionStorage.getItem('CafewToken')
+    },
+    body: body
+  })
+  .then(status)
+  .then(response => response.json());
+}
+
+function post(path, body) {
+  return update(path, body, 'POST');
+}
+
 function put(path, body) {
-	return fetch(URL + path, {
-      method: 'PUT',
-      credentials: 'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + window.sessionStorage.getItem('CafewToken')
-      },
-      body: body
-    })
-    .then(status)
-    .then(response => response.json());
+  return update(path, body, 'PUT');
 }
 
 function get(path) {
@@ -37,4 +45,4 @@ function get(path) {
     .then(response => response.json());
 }
 
-export { get, put };
+export { get, put, post };

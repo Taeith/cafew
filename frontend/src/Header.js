@@ -6,7 +6,7 @@ import CustomToast from './CustomToast';
 
 import $ from 'jquery';
 
-import './Header.css';
+import './header.css';
 
 import Signup from './Signup';
 import Login from './Login';
