@@ -26,6 +26,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isLoggedIn: false,			
 			customToast: {
 	        	type: '',
 	        	message: '',
@@ -34,6 +35,12 @@ class App extends React.Component {
 	      	}
 		};
 	}
+
+	setIsLoggedIn = (isLoggedIn) => {
+		this.setState({
+			isLoggedIn: isLoggedIn
+		});
+	};
 
 	handleShowToast = (type, message) => {
       this.setState({
@@ -58,7 +65,10 @@ class App extends React.Component {
 		return (
 			<div className="app">
 				<Router>
-					<Header />
+					<Header
+						isLoggedIn = { this.state.isLoggedIn }
+						setIsLoggedIn = { this.setIsLoggedIn } 
+						handleShowToast = { this.handleShowToast } />
 					<Container fluid style={{'margin-bottom':'30px', 'min-height':'700px'}}>
 						<Row>
 							<Col xs = { 12 } md = { 2 } id = "sidebar-wrapper" >      
@@ -79,7 +89,8 @@ class App extends React.Component {
 										<Messages />
 									</Route>
 									<Route path="/parametres">
-										<Parameters />
+										<Parameters 
+											handleShowToast = { this.handleShowToast } />
 									</Route>
 									<Route path="/">
 										<CustomMap />

@@ -18,8 +18,8 @@ export default class Login extends React.Component {
   handleChange = (event) => {
     this.setState({
       [event.target.type]: event.target.value,        
-    }, () => {
-      this.setState({
+    }, () => {      
+      this.setState({        
         disabled: !this.isValid()
       });
     });
@@ -33,13 +33,14 @@ export default class Login extends React.Component {
     }))
     .then(data => {
       if (data.token != undefined && data.username != undefined) {
-        this.props.handleAuthentification(data.username);
+        this.props.signin(data.username);
         window.sessionStorage.setItem('CafewUserId', data.userId);
         window.sessionStorage.setItem('CafewUsername', data.username);
         window.sessionStorage.setItem('CafewToken', data.token);
       }     
     })
     .catch(error => {
+      console.log(error);
       this.props.handleShowToast("danger", "L'adresse e-mail ou le mot de passe est incorrect.");
     });
   };
@@ -67,8 +68,10 @@ export default class Login extends React.Component {
               <Form.Label>Mot de passe</Form.Label>
               <Form.Control type="password" onChange={ this.handleChange }/>
             </Form.Group>
-            <Button variant="primary" disabled={(this.state.disabled) ? 'disabled' : ''}
-              onClick={ this.handleSubmit }>
+            <Button 
+              variant = "primary" 
+              disabled = { (this.state.disabled) ? 'disabled' : '' }
+              onClick = { this.handleSubmit } >
               Valider
             </Button>
           </Form>

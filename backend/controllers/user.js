@@ -4,8 +4,14 @@ const bcrypt = require('bcrypt');
 
 function getById(id, callback) {
   User.findOne({ _id: id })
-  .then(user => callback(user))
-  .catch(error => response.status(500).json({ error }));
+  .then(user => {
+    console.log("[INFO] User has been found");
+    callback(user);
+  })
+  .catch(error => {
+    console.log("[ERROR] No user found with this id");
+    response.status(400).json({});
+  });
 }
 
 exports.get = (request, response, next) => {
@@ -24,6 +30,24 @@ exports.get = (request, response, next) => {
   });
 };
 
+exports.delete = (request, response, next) => {
+    console.log("[OPEN] USER DELETE");
+    User.deleteOne({_id: request.params.id})
+    .then(() => {
+      console.log("[INFO] User has been deleted");
+      response.status(200).json({
+        message: 'Deleted!'
+      });
+    })
+    .catch(error => {
+      console.log("[ERROR] User can't be deleted");
+      response.status(400).json({
+        error: error
+      });
+    }
+  );
+}
+
 exports.update = (request, response, next) => {
   console.log('[OPEN] USER UPDATE');
   getById(request.params.id, user => {
@@ -41,13 +65,12 @@ exports.update = (request, response, next) => {
     });
     User.updateOne({ _id: user._id }, newUser)
     .then(() => {
-      console.log('ok update');
+      console.log("[INFO] User has been updated");
       response.status(201).json({});
     })
     .catch(error => {
-      console.log('error update');
-      response.status(500).json({})
-    });
-  });
+      console.log("[ERROR] User can't be updated");
+      response.status(400).json({})
+    });  });
 
 }

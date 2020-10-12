@@ -34,8 +34,8 @@ app.use((request, response, next) => {
 	next();
 });
 
-app.use('/api/user/', userRoutes);
 app.use('/api/auth/', authRoutes);
+app.use('/api/user/', userRoutes);
 app.use('/api/request/', requestRoutes);
 app.use('/api/markers/', markerRoutes);
 

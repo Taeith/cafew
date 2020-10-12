@@ -23,50 +23,60 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props);
-    const username = window.sessionStorage.getItem('CafewUsername');
     this.state = {
+      username: '',
       showSignup: false,
       setShowSignup: false,
       showLogin: false,
-      setShowLogin: false,
-      showProfile: false,
-      setShowProfile: false,
-      isLoggedIn: username != null,
-      username: username
-    };
-    // Modals
-    this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
-    this.handleShowSignup = () => this.setState({setShowSignup: true, showSignup: true});
-    this.handleCloseLogin = () => this.setState({setShowLogin: false, showLogin: false});
-    this.handleShowLogin = () => this.setState({setShowLogin: true, showLogin: true});
-    this.handleCloseProfile = () => this.setState({setShowProfile: false, showProfile: false});
-    
-    this.handleShowProfile = () => {
-      this.setState({
-        setShowProfile: true, 
-        showProfile: true
-      });
-    };
-    this.handleAuthentification = (username) => {
-      this.handleCloseLogin();
-      this.setState({
-        isLoggedIn: true,
-        username: username
-      });
-    }
-    this.signout = () => {
-      window.sessionStorage.removeItem('CafewToken');
-      window.sessionStorage.removeItem('CafewUsername');
-      this.setState({
-        isLoggedIn: false,
-        username: ''
-      });
-      this.handleShowToast("success", "La session a été supprimée.");
+      setShowLogin: false
     };
   }
 
+  signin = (username) => {
+    this.setState({
+      username: username
+    });
+    this.handleCloseLogin();
+    this.props.setIsLoggedIn(true);
+  };
+  
+  signout = () => {
+    window.sessionStorage.removeItem('CafewToken');
+    window.sessionStorage.removeItem('CafewUsername');
+    this.props.setIsLoggedIn(false);
+    this.props.handleShowToast("success", "La session a été supprimée.");
+  };
+
+  handleCloseSignup = () => {
+    this.setState({
+      setShowSignup: false, 
+      showSignup: false
+    });
+  };
+
+  handleShowSignup = () => {
+    this.setState({
+      setShowSignup: true, 
+      showSignup: true
+    });
+  };
+
+  handleCloseLogin = () => {
+    this.setState({
+      setShowLogin: false, 
+      showLogin: false
+    });
+  };
+
+  handleShowLogin = () => {
+    this.setState({
+      setShowLogin: true, 
+      showLogin: true
+    });
+  };
+
   render() {
-    if (this.state.isLoggedIn) {
+    if (this.props.isLoggedIn) {
       return (
         <Navbar expand="sm" variant="dark">      
           <Brand />
@@ -102,34 +112,19 @@ export default class Header extends React.Component {
               onClick={ this.handleShowLogin } >
               Connexion
             </Nav.Link>
-          </Nav>            
+          </Nav>
           <Signup 
             showSignup = { this.state.showSignup } 
             handleCloseSignup = { this.handleCloseSignup } 
-            handleShowToast = { this.handleShowToast } />
+            handleShowToast = { this.props.handleShowToast } />
           <Login 
               showLogin = { this.state.showLogin } 
               handleCloseLogin = { this.handleCloseLogin } 
-              handleAuthentification = { this.handleAuthentification }
-              handleShowToast = { this.handleShowToast } />
+              signin = { this.signin }
+              handleShowToast = { this.props.handleShowToast } />
         </Navbar>
       );
     }
   }
 
 }
-
-/*
-  <Button 
-    onClick = { this.handleShowProfile } 
-    variant = "outline-primary" 
-    className = "profileButton">
-    Mon profil
-  </Button>
-  <Button 
-    onClick = { this.handleShowProfile } 
-    variant = "outline-primary" 
-    className = "profileButton">
-    Contacts
-  </Button>
-*/
