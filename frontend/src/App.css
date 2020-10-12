@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sofia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Catamaran&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
 
 .app {
 	background-color: #20232a !important;
-	font-family: 'Sofia', sans-serif;
+	font-family: 'Catamaran', sans-serif;
 	color: rgb(230,230,230);
 }
 .brand-logo, .brand-name {

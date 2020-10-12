@@ -2,9 +2,11 @@ import React from 'react';
 
 import { Nav, Navbar, Button } from 'react-bootstrap';
 
+import CustomToast from './CustomToast';
+
 import $ from 'jquery';
 
-import './header.css';
+import './Header.css';
 
 import Signup from './Signup';
 import Login from './Login';
@@ -32,7 +34,31 @@ export default class Header extends React.Component {
       showProfile: false,
       setShowProfile: false,
       isLoggedIn: username != null,
-      username: username
+      username: username,
+      customToast: {
+        type: '',
+        message: '',
+        show: false,
+        setShow: false
+      }
+    };
+    // CustomToast
+    this.handleCloseToast = () => this.setState(prevState => ({
+      customToast: {
+        ...prevState.customToast,
+        show: false, 
+        setShow: false
+      }
+    }));
+    this.handleShowToast = (type, message) => {
+      this.setState({
+        customToast: {
+          type: type,
+          message: message,
+          show: true, 
+          setShow: true
+        }
+      });
     };
     // Modals
     this.handleCloseSignup = () => this.setState({setShowSignup: false, showSignup: false});
@@ -68,15 +94,31 @@ export default class Header extends React.Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <Navbar expand="sm" variant="dark">      
+        <Navbar collapseOnSelect expand="sm" variant="dark">      
           <Brand />
-            <Nav className="ml-auto justify-content-end">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse 
+            id="responsive-navbar-nav"
+            className="justify-content-end" >    
+            <Nav className="ml-auto">
               <Nav className="buttons">
-                <Navbar.Text className="d-none d-sm-block">
-                  Connnecté en tant que : <span className="white">{ this.state.username }</span>
+                <Navbar.Text>
+                  Connecté en tant que : <span className="white">{ this.state.username }</span>
                 </Navbar.Text>
               </Nav>              
               <Nav className="buttons">
+                <Button 
+                  onClick = { this.handleShowProfile } 
+                  variant = "outline-primary" 
+                  className = "profileButton">
+                  Mon profil
+                </Button>
+                <Button 
+                  onClick = { this.handleShowProfile } 
+                  variant = "outline-primary" 
+                  className = "profileButton">
+                  Contacts
+                </Button>
                 <Button 
                   onClick = { this.signout }
                   variant = "outline-danger" 
@@ -85,24 +127,35 @@ export default class Header extends React.Component {
                 </Button>
               </Nav>
             </Nav>
+          </Navbar.Collapse>
+          <Profile
+            showProfile={ this.state.showProfile } 
+            handleCloseProfile={ this.handleCloseProfile } 
+            handleShowToast = { this.handleShowToast } />
+          <CustomToast 
+              handleCloseToast = { this.handleCloseToast } 
+              showToast = { this.state.customToast.show }
+              type = { this.state.customToast.type }
+              message = { this.state.customToast.message } />
         </Navbar>
       );
     } else {
       return (
-        <Navbar variant="dark">
+        <Navbar collapseOnSelect expand="sm" variant="dark">
           <Brand />
-          <Nav className="ml-auto justify-content-end">
-            <Nav.Link 
-              className="header-link" 
-              onClick={ this.handleShowSignup } >
-              Inscription
-            </Nav.Link>
-            <Nav.Link 
-              className="header-link" 
-              onClick={ this.handleShowLogin } >
-              Connexion
-            </Nav.Link>
-          </Nav>            
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="ml-auto">
+              <Nav.Link 
+                className="header-link" 
+                onClick={ this.handleShowSignup }>Inscription
+              </Nav.Link>
+              <Nav.Link 
+                className="header-link" 
+                onClick={ this.handleShowLogin }>Connexion
+              </Nav.Link>
+            </Nav>            
+          </Navbar.Collapse>
           <Signup 
             showSignup = { this.state.showSignup } 
             handleCloseSignup = { this.handleCloseSignup } 
@@ -112,24 +165,14 @@ export default class Header extends React.Component {
               handleCloseLogin = { this.handleCloseLogin } 
               handleAuthentification = { this.handleAuthentification }
               handleShowToast = { this.handleShowToast } />
+          <CustomToast 
+              handleCloseToast = { this.handleCloseToast } 
+              showToast = { this.state.customToast.show }
+              type = { this.state.customToast.type }
+              message = { this.state.customToast.message } />
         </Navbar>
       );
     }
   }
 
 }
-
-/*
-  <Button 
-    onClick = { this.handleShowProfile } 
-    variant = "outline-primary" 
-    className = "profileButton">
-    Mon profil
-  </Button>
-  <Button 
-    onClick = { this.handleShowProfile } 
-    variant = "outline-primary" 
-    className = "profileButton">
-    Contacts
-  </Button>
-*/
