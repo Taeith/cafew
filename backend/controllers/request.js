@@ -1,4 +1,5 @@
 const Request = require('../models/request');
+const userCtrl = require('../controllers/user');
 
 function getById(id, callback) {
   console.log('[OPEN] REQUEST GET BY ID');
@@ -40,10 +41,22 @@ function getForProducer(id, state) {
 
 function getForRecycler(id, state) {
   console.log('[OPEN] REQUEST GET FOR RECYCLER');
-  return Request.find({ 
+  /*
+  Request.find({ 
     recycler: id,
     state: state
-  });
+  })
+  */
+  return Request.aggregate([{
+    $lookup: {
+       from: "user",
+       localField: "producer",
+       foreignField: "id",
+       as: "usesdsd"
+    }
+  }]);
+
+
 }
 
 exports.get = (request, response, next) => {
@@ -58,8 +71,9 @@ exports.get = (request, response, next) => {
       set = getForRecycler(request.params.id, request.params.state);
       break;
   }
-  set.then(requests => {
-    response.status(200).json(requests);
+  set.then(data => {
+    console.log(JSON.stringify(data));
+    response.status(200).json(data);
   })
   .catch(error => {
     response.status(500).json({});
