@@ -25,6 +25,14 @@ export default class Sidebar extends React.Component {
           <Nav.Item>
               <Nav.Link 
                 eventKey="link-1" >
+                <Link to="/" >
+                  Carte
+                </Link>
+              </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+              <Nav.Link 
+                eventKey="link-1" >
                 <Link to="/profile" >
                   Profile
                 </Link>
