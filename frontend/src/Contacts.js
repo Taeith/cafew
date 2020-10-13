@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { ListGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
 
-import { get, put } from './Utils.js';
+import { get, put, remove } from './Utils.js';
 
 export default class Contacts extends React.Component {
 
@@ -16,10 +16,6 @@ export default class Contacts extends React.Component {
 
 	componentDidMount() {
 		this.load();
-	}
-
-	refuseRequest = () => {
-		alert("La requête à été refusée !");
 	}
 
 	acceptRequest = (id) => {
@@ -36,6 +32,17 @@ export default class Contacts extends React.Component {
 	    )});
 	}
 
+	refuseRequest = (id) => {
+		remove('/request/' + id)
+	    .then((response) => {
+	    	this.load();
+	      this.props.handleShowToast("success", "La requête à été supprimée.");
+	    })
+	    .catch(error => {
+	      this.props.handleShowToast("danger", "Votre compte n'a pas pu être supprimé."
+	    )});
+	}
+
 	load = () => {
 		// LOAD REQUESTS
 		get('/request/recycler/' + window.sessionStorage.getItem('CafewUserId') + '/PENDING')
@@ -44,7 +51,7 @@ export default class Contacts extends React.Component {
 	       		<ListGroup.Item>
 			  		{ request.producerAlias }
 			  		<Button 
-			  			onClick = { this.refuseRequest }
+			  			onClick = { () => this.refuseRequest(request._id) }
 			  			variant = "outline-danger" 
 			  			className = "float-right" 
 			  			style = {{'margin-right':'10px'}} >
@@ -71,6 +78,7 @@ export default class Contacts extends React.Component {
 				  <ListGroup.Item>
 				  	{ friend.producerAlias }
 				  	<Button 
+				  		onClick = { () => this.refuseRequest(friend._id) }
 				  		variant="outline-danger" 
 				  		className="float-right" 
 				  		style={{'margin-right':'10px'}}>
@@ -87,16 +95,27 @@ export default class Contacts extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<h4>Demandes</h4>
-				<ListGroup>
-					{ this.state.requests }
-				</ListGroup>
+			<Container>
+				<Row>
+					<Col>
+						<h4>Invitations</h4>
+						<p>Ces personnes souhaitent rentrer en contact avec vous :</p>
+						<ListGroup>
+							{ this.state.requests }
+						</ListGroup>
+					</Col>
+				</Row>
 				<br/>
-				<h4>Clients</h4>
-					{ this.state.friends }
-				<br/>
-			</div>
+				<Row>
+					<Col>
+						<h4>Contacts</h4>
+						<p>Ces personnes constituent votre réseau de recyclage :</p>
+						<ListGroup>
+							{ this.state.friends }
+						</ListGroup>
+					</Col>
+				</Row>
+			</Container>
 		);
 	}
 

@@ -9,5 +9,6 @@ const requestCtrl = require('../controllers/request');
 router.post('/', auth, requestCtrl.add);
 router.get('/:type/:id/:state', requestCtrl.get);
 router.put('/:id', requestCtrl.update);
+router.delete('/:id', requestCtrl.delete);
 
 module.exports = router;

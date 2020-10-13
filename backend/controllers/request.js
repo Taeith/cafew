@@ -66,6 +66,24 @@ exports.get = (request, response, next) => {
   });
 };
 
+exports.delete = (request, response, next) => {
+    console.log("[OPEN] REQUEST DELETE");
+    Request.deleteOne({_id: request.params.id})
+    .then(() => {
+      console.log("[INFO] Request has been deleted");
+      response.status(200).json({
+        message: 'Deleted!'
+      });
+    })
+    .catch(error => {
+      console.log("[ERROR] Request can't be deleted");
+      response.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+
 exports.update = (request, response, next) => {
   console.log('[OPEN] REQUEST UPDATE');
   console.log('[PARAMS] <' + request.params.id + ', ' + request.body.state + '>');
