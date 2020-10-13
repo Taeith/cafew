@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import { Nav, Navbar, Button } from 'react-bootstrap';
 
@@ -23,8 +24,9 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props);
+    const username = window.sessionStorage.getItem('CafewUsername');
     this.state = {
-      username: props.username,
+      username: username,
       showSignup: false,
       setShowSignup: false,
       showLogin: false,
@@ -87,12 +89,15 @@ export default class Header extends React.Component {
                 </Navbar.Text>
               </Nav>              
               <Nav className="buttons">
-                <Button 
+                <Link to="/" >
+                 <Button 
                   onClick = { this.signout }
                   variant = "outline-danger" 
                   className = "signoutButton" >
                   Déconnexion
                 </Button>
+                </Link>
+                
               </Nav>
             </Nav>
         </Navbar>
