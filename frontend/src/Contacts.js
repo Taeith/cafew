@@ -49,21 +49,31 @@ export default class Contacts extends React.Component {
 	    .then(requests => {
 	    	const reqs = requests.map(request => (
 	       		<ListGroup.Item>
-			  		{ request.producerAlias }
-			  		<Button 
-			  			onClick = { () => this.refuseRequest(request._id) }
-			  			variant = "outline-danger" 
-			  			className = "float-right" 
-			  			style = {{'margin-right':'10px'}} >
-			  			❌
-			  		</Button>
-			  		<Button 
-			  			onClick = { () => this.acceptRequest(request._id) }
-			  			variant = "outline-success" 
-			  			className = "float-right" 
-			  			style = {{'margin-right':'10px'}}>
-			  			✅
-			  		</Button>
+			  		<Container>
+				  		<Row>
+				  			<Col sm = { 8 } >
+				  				<div>
+				  					@{ request.producerAlias }
+				  				</div>
+				  			</Col>
+				  			<Col sm = { 4 } >
+						  		<Button 
+						  			onClick = { () => this.refuseRequest(request._id) }
+						  			variant = "outline-danger" 
+						  			className = "float-right" 
+						  			style = {{'margin-right':'10px'}} >
+						  			❌
+						  		</Button>
+						  		<Button 
+						  			onClick = { () => this.acceptRequest(request._id) }
+						  			variant = "outline-success" 
+						  			className = "float-right" 
+						  			style = {{'margin-right':'10px'}}>
+						  			✅
+						  		</Button>
+			  				</Col>
+				  		</Row>
+				  	</Container>
 			  	</ListGroup.Item>
 	       	));
 	       this.setState({
@@ -73,17 +83,35 @@ export default class Contacts extends React.Component {
 	    // LOAD FRIENDS
 	    get('/request/recycler/' + window.sessionStorage.getItem('CafewUserId') + '/FRIENDS')
 	    .then(requests => {
-	    	const friends = requests.map(friend => (
+	    	const friends = requests.map(request => (
 	    		<ListGroup>
 				  <ListGroup.Item>
-				  	{ friend.producerAlias }
-				  	<Button 
-				  		onClick = { () => this.refuseRequest(friend._id) }
-				  		variant="outline-danger" 
-				  		className="float-right" 
-				  		style={{'margin-right':'10px'}}>
-				  		❌
-				  	</Button>
+				  	<Container>
+				  		<Row>
+				  			<Col sm = { 8 } >
+				  				<div>
+				  					@{ request.producerAlias }
+				  				</div>
+				  				<div>
+				  					- L'utilisateur habite dans la ville du code postal { request.user[0].city }.	
+				  				</div>
+				  				<div>
+				  					- La quantité donnée est de { request.user[0].quantity }g.
+				  				</div>
+				  			</Col>
+				  			<Col sm = { 4 } >
+				  				<Button 
+							  		onClick = { () => this.refuseRequest(request._id) }
+							  		variant="outline-danger" 
+							  		className="float-right" 
+							  		style={{'margin-right':'10px'}}>
+							  		❌
+							  	</Button>
+				  			</Col>
+				  		</Row>
+				  	</Container>
+				  	
+				  	
 				  </ListGroup.Item>
 				</ListGroup>
 	       	));

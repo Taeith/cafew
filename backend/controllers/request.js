@@ -1,3 +1,5 @@
+var ObjectId = require('mongodb').ObjectID;
+
 const Request = require('../models/request');
 const userCtrl = require('../controllers/user');
 
@@ -39,24 +41,29 @@ function getForProducer(id, state) {
   });
 }
 
-function getForRecycler(id, state) {
+function getForRecycler(response, id, state) {
   console.log('[OPEN] REQUEST GET FOR RECYCLER');
-  /*
-  Request.find({ 
-    recycler: id,
-    state: state
-  })
-  */
   return Request.aggregate([{
-    $lookup: {
-       from: "user",
-       localField: "producer",
-       foreignField: "id",
-       as: "usesdsd"
+    $match: {
+      state: state,
+      recycler: ObjectId(id)
     }
-  }]);
-
-
+  }, {
+    $lookup: {
+       from: "users",
+       localField: "producer",
+       foreignField: "_id",
+       as: "user"
+    }
+  }
+  ])
+  .then(requests => {
+    console.log(JSON.stringify(requests));
+    response.status(200).json(requests);
+  })
+  .catch(error => {
+    response.status(500).json({});
+  });
 }
 
 exports.get = (request, response, next) => {
@@ -65,19 +72,10 @@ exports.get = (request, response, next) => {
   var set = null;
   switch (request.params.type) {
     case 'producer':
-      set = getForProducer(request.params.id, request.params.state);
-      break;
+      return getForProducer(response, request.params.id, request.params.state);
     case 'recycler':
-      set = getForRecycler(request.params.id, request.params.state);
-      break;
+      return getForRecycler(response, request.params.id, request.params.state);
   }
-  set.then(data => {
-    console.log(JSON.stringify(data));
-    response.status(200).json(data);
-  })
-  .catch(error => {
-    response.status(500).json({});
-  });
 };
 
 exports.delete = (request, response, next) => {
@@ -119,3 +117,17 @@ exports.update = (request, response, next) => {
     });
   })
 };
+
+/*
+requests = requests.map(request => new Map()
+      .set({
+      _id = request._id,
+      producer_id = request.producer,
+      username = request.user[0].username,
+      city = request.user[0].city,
+      capacity = request.user[0].capacity,
+    }));
+    response.status(200).json(requests);
+
+
+*/
